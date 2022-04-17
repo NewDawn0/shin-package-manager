@@ -1,7 +1,9 @@
 #!/bin/bash
 source $HOME/.ndos/shin/shin.config
+source $HOME/.ndos/shin/shinVersion.config
 update () {
     wget https://raw.githubusercontent.com/NewDawn0/shin/main/shin > /dev/null 2>&1
+    wget 
     mv shin.1 shin && chmod +x shin
     echo ""
     echo -e "\033[0;36mSuccessfully updated to       \033[0m"
