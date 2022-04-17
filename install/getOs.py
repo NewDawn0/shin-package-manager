@@ -3,7 +3,7 @@ import os
 platform == 'other'
 if platform != "win32":
     if platform == "darwin":
-        os.system('sudo bash macos.sh')
+        os.system('sudo bash install/macos.sh')
     else:
        pass
 
