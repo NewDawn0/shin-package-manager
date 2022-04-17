@@ -105,6 +105,17 @@ installation () {
             echo -e "\033[0;32m=>\033[0m figlet"
         fi
     }
+    wget () {
+        which -s wget
+        if [[ $? != 0 ]] ; then
+            echo -e "\033[0;36m=>\033[0m Installing wget ..."
+            echo -e "\033[0;36m=>\033[0m This might take a while"
+            brew install wget > /dev/null 2>&1
+            echo -e "\033[0;32m=>\033[0m Installed wget"
+        else
+            echo -e "\033[0;32m=>\033[0m wget"
+        fi
+    }
     echo "Checking and installing dependencies ..."
     brew
     cmake
@@ -113,6 +124,7 @@ installation () {
     cargo
     npm
     indiepkg
+    figlet
 
     #configs
     this=$(pwd)
