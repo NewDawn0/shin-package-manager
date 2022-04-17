@@ -31,3 +31,7 @@ Shin will only search the package with the named package manager which is in thi
 
 
 ## Installation
+```
+git clone https://github.com/NewDawn0/shin.git
+cd shin
+./install.sh
