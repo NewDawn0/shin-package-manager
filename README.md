@@ -34,4 +34,5 @@ Shin will only search the package with the named package manager which is in thi
 ```
 git clone https://github.com/NewDawn0/shin.git
 cd shin
+chmod +x install.sh
 ./install.sh
