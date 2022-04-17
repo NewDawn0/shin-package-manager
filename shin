@@ -1,0 +1,6 @@
+#!/bin/bash
+update () {
+    wget https://raw.githubusercontent.com/NewDawn0/shin/main/
+    echo -e "\033[0;36m   Updated to       \033[0m"
+    echo -e "\033[0;36m   Updated to       \033[0m"
+}
