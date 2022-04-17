@@ -94,6 +94,17 @@ installation () {
             echo -e "\033[0;32m=>\033[0m Npm"
         fi
     }
+    figlet () {
+        which -s figlet
+        if [[ $? != 0 ]] ; then
+            echo -e "\033[0;36m=>\033[0m Installing figlet ..."
+            echo -e "\033[0;36m=>\033[0m This might take a while"
+            brew install figlet > /dev/null 2>&1
+            echo -e "\033[0;32m=>\033[0m Installed figlet"
+        else
+            echo -e "\033[0;32m=>\033[0m figlet"
+        fi
+    }
     echo "Checking and installing dependencies ..."
     brew
     cmake
@@ -102,6 +113,12 @@ installation () {
     cargo
     npm
     indiepkg
+
+    #configs
+    this=$(pwd)
+    cd $HOME
+    sudo mkdir -p .ndos/shin
+    sudo cp $this/configs/shin.config .ndos/shin/
 }
  
 ####### Update
