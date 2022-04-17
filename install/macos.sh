@@ -131,6 +131,7 @@ installation () {
     cd $HOME
     sudo mkdir -p .ndos/shin
     sudo cp $this/configs/shin.config .ndos/shin/
+    sudo cp $this/configs/shinVersion.config .ndos/shin/
 }
  
 ####### Update
