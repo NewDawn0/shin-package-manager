@@ -41,18 +41,26 @@ installation () {
             echo -e "\033[0;32m=>\033[0m Go"
         fi
     }
+    python () {
+        which -s python
+        if [[ $? != 0 ]] ; then
+            echo -e "\033[0;36m=>\033[0m Installing Python ..."
+            echo -e "\033[0;36m=>\033[0m This might take a while"
+            brew install python > /dev/null 2>&1
+            echo -e "\033[0;32m=>\033[0m Installed Python"
+        else
+            echo -e "\033[0;32m=>\033[0m Python"
+        fi
+    }
     ports () {
         which -s port
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing macPorts ... "
             echo -e "\033[0;36m=>\033[0m This might take a while"
-            wget https://github.com/macports/macports-base/releases/download/v2.7.2/MacPorts-2.7.2.tar.gz > /dev/null 2>&1
-            tar xzvf MacPorts-2.7.2.tar.gz > /dev/null 2>&1
-            cd MacPorts-2.7.2
-            ./configure && make && sudo make install > /dev/null 2>&1
-            cd ../
-            rm -rf MacPorts-2.7.2* > /dev/null 2>&1
-            ps -aux | grep spinner.sh
+            xcode-select --install > /dev/null 2>&1
+            wget "https://github.com/macports/macports-base/releases/download/v2.7.2/MacPorts-2.7.2-12-Monterey.pkg" > /dev/null 2>&1
+            sudo installer -pkg MacPorts-2.7.2-12-Monterey.pkg -target / > /dev/null 2>&1
+            sudo rm MacPorts-2.7.2-12-Monterey.pkg
             echo -e "\033[0;32m=>\033[0m Installed macPorts"
         else
             echo -e "\033[0;32m=>\033[0m macPorts"

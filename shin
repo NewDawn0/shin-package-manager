@@ -2,18 +2,14 @@
 source $HOME/.ndos/shin/shin.config
 source $HOME/.ndos/shin/shinVersion.config
 update () {
-    echo -ne "\033[0;36m=> Upadting 0/9 \033[0m\r"
-    brew update > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 1/9\033[0m\r"
-    brew upgrade > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 2/9\033[0m\r"
-    indiepkg update > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 3/9\033[0m\r"
-    npm install -g npm@latest > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 4/9\033[0m\r"
-    npm update -g > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 5/9\033[0m\r"
-    wget https://github.com/macports/macports-base/releases/download/v2.7.2/MacPorts-2.7.2.tar.gz > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 6/9\033[0m\r"
-    tar xzvf MacPorts-2.7.2.tar.gz > /dev/null 2>&1 echo -ne "\033[0;36m=> Upadting 7/9\033[0m\r"
-    cd MacPorts-2.7.2
-    ./configure && make && sudo make install > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 8/9\033[0m\r"
-    cd ../
-    rm -rf MacPorts-2.7.2* > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 9/9\033[0m\r"
+    echo -ne "\033[0;36m=> Upadting 0/7 \033[0m\r"
+    brew update > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 1/7\033[0m\r"
+    brew upgrade > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 2/7\033[0m\r"
+    indiepkg update > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 3/7\033[0m\r"
+    npm install -g npm@latest > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 4/7\033[0m\r"
+    npm update -g > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 5/7\033[0m\r"
+    sudo port selfupdate > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 6/7\033[0m\r"
+    sudo port upgrade outdated > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 7/7\033[0m\r"
     echo -ne "\033[0;32m=> Updated all package \033[0m\r"
 }
 shin-update () {
