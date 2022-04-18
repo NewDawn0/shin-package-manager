@@ -1,5 +1,5 @@
 # shin
-One to unite them all
+"One to bind them all"
 (a universal package manager)
 
 ### Table of contents
