@@ -5,7 +5,7 @@ update () {
     wget https://raw.githubusercontent.com/NewDawn0/shin/main/shin > /dev/null 2>&1
     wget https://raw.githubusercontent.com/NewDawn0/shin/main/configs/shinVersion.config > /dev/null 2>&1
     mv shin.1 shin && chmod +x shin
-    sudo mv shinVersion.config $HOME/.ndos/shin/shinVersion.config
+    mv shinVersion.config $HOME/.ndos/shin/shinVersion.config
     source $HOME/.ndos/shin/shinVersion.config
     echo ""
     echo -e "\033[0;36mSuccessfully updated to       \033[0m"
@@ -13,7 +13,7 @@ update () {
     echo ""
 }
 ## main
-if [ "$1" == "update" ] || [ "$1" == "-u"]; then
+if [ "$1" == "shin-update" ] || [ "$1" == "-us" ] || [ "$1" == "-su" ]; then
     update
 else
     echo "Error: Invalid argument"
