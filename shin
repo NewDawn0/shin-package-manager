@@ -13,8 +13,13 @@ update () {
     echo ""
 }
 ## main
-if [ "$1" == "shin-update" ] || [ "$1" == "-us" ] || [ "$1" == "-su" ]; then
-    update
+id=$(id -u)
+fi [ $id -eq 0 ]; then
+    if [ "$1" == "shin-update" ] || [ "$1" == "-us" ] || [ "$1" == "-su" ]; then
+        update
+    else
+        echo "Error: Invalid argument"
+    fi
 else
-    echo "Error: Invalid argument"
+    echo "Shin must be run as root"
 fi
