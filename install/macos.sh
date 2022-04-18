@@ -1,11 +1,6 @@
 #!/bin/bash
-echo -e "\033[0;36m   ____  _     _       \033[0m"
-echo -e "\033[0;36m  / ___|| |__ (_)_ __  \033[0m"
-echo -e "\033[0;36m  \___ \| '_ \| | '_ \ \033[0m"
-echo -e "\033[0;36m   ___) | | | | | | | |\033[0m"
-echo -e "\033[0;36m  |____/|_| |_|_|_| |_|\033[0m"
-echo ""
-########### Functions ###########
+####### configs
+source $HOME/.ndos/shin/shin.config
 ####### Installation
 installation () {
     brew () {
@@ -13,7 +8,7 @@ installation () {
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing Homebrew ..."
             echo -e "\033[0;36m=>\033[0m This might take a while"
-            ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /dev/null 2>&1
+            sudo -u $user ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed Homebrew"
         else
             echo -e "\033[0;32m=>\033[0m Homebrew"
@@ -24,7 +19,7 @@ installation () {
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing CMake ..."
             echo -e "\033[0;36m=>\033[0m This might take a while"
-            brew install cmake > /dev/null 2>&1
+            sudo -u $user brew install cmake > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed cmake"
         else
             echo -e "\033[0;32m=>\033[0m CMake"
@@ -35,7 +30,7 @@ installation () {
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing Go ..."
             echo -e "\033[0;36m=>\033[0m This might take a while"
-            brew install go > /dev/null 2>&1
+            sudo -u $user brew install go > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed Go"
         else
             echo -e "\033[0;32m=>\033[0m Go"
@@ -46,8 +41,8 @@ installation () {
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing Python ..."
             echo -e "\033[0;36m=>\033[0m This might take a while"
-            brew install python > /dev/null 2>&1
-            brew install python3 > /dev/null 2>&1
+            sudo -u $user brew install python > /dev/null 2>&1
+            sudo -u $user brew install python3 > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed Python"
         else
             echo -e "\033[0;32m=>\033[0m Python"
@@ -72,7 +67,7 @@ installation () {
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing Cargo ..."
             echo -e "\033[0;36m=>\033[0m This might take a while"
-            brew install rust > /dev/null 2>&1
+            sudo -u $user brew install rust > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed Cargo"
         else
             echo -e "\033[0;32m=>\033[0m Cargo"
@@ -83,10 +78,10 @@ installation () {
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing Indiepkg ..."
             echo -e "\033[0;36m=>\033[0m This might take a while"
-            git clone https://github.com/talwat/indiepkg.git > /dev/null 2>&1
-            cd indiepkg > /dev/null 2>&1
-            make > /dev/null 2>&1
-            make install > /dev/null 2>&1
+            sudo -u $user git clone https://github.com/talwat/indiepkg.git > /dev/null 2>&1
+            sudo -u $user cd indiepkg > /dev/null 2>&1
+            sudo -u $user make > /dev/null 2>&1
+            sudo -u $user make install > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed Indiepkg"
         else
             echo -e "\033[0;32m=>\033[0m Indiepkg"
@@ -97,7 +92,7 @@ installation () {
         if [[ $? != 0 ]] ; then
             echo -e "Installing NodeJS/npm ..."
             echo -e "This might take a while"
-            brew install node > /dev/null 2>&1
+            sudo -u $user brew install node > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed Npm"
         else
             echo -e "\033[0;32m=>\033[0m Npm"
@@ -108,7 +103,7 @@ installation () {
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing figlet ..."
             echo -e "\033[0;36m=>\033[0m This might take a while"
-            brew install figlet > /dev/null 2>&1
+            sudo -u $user brew install figlet > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed figlet"
         else
             echo -e "\033[0;32m=>\033[0m figlet"
@@ -119,7 +114,7 @@ installation () {
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing wget ..."
             echo -e "\033[0;36m=>\033[0m This might take a while"
-            brew install wget > /dev/null 2>&1
+            sudo -u $user brew install wget > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed wget"
         else
             echo -e "\033[0;32m=>\033[0m wget"
@@ -127,6 +122,7 @@ installation () {
     }
     echo "Checking and installing dependencies ..."
     brew
+    wget
     cmake
     go
     ports
@@ -134,22 +130,6 @@ installation () {
     npm
     indiepkg
     figlet
-
-    #configs
-    this=$(pwd)
-    cd $HOME
-    sudo mkdir -p .ndos/shin
-    sudo cp $this/configs/shin.config .ndos/shin/
-    sudo cp $this/configs/shinVersion.config .ndos/shin/
-    sudo cp $this/shin /usr/local/bin
-}
- 
-####### Update
-update () {
-    brew update && brew upgrade
-    sudo port -v selfupdate
-    cargo update
-    indiepkg upgrade && indiepkg update
 }
 
 installation

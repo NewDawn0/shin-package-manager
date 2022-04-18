@@ -34,36 +34,39 @@ shin-update () {
 install () {
     for pkg in "$@"
     do
-        if brew install "$pkg" > /dev/null 2>&1; then
+        if sudo -u $user brew install "$pkg" > /dev/null 2>&1; then
             echo -e "\033[0;32m=>\033[0m Installed $pkg with brew"
             #echo $pkg >> $HOME/.ndos/shin/installed.packages
         else
-            if brew install --cask "$pkg" > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
-            else
-                if indiepkg install -y "$pkg" > /dev/null 2>&1; then
-                    echo -e "\033[0;32m=>\033[0m Installed $pkg"
+            #if sudo -u $user brew install cask $pkg > /dev/null 2>&1; then
+            #    echo -e "\033[0;32m=>\033[0m Installed $pkg with brew as app"
+            #else
+                echo "here :)"
+                sudo -u $user brew install cask $pkg
+                echo "here :("
+                if sudo -u $user indiepkg install -y "$pkg" > /dev/null 2>&1; then
+                    echo -e "\033[0;32m=>\033[0m Installed $pkg with indiepkg"
                 else
-                    if sudo port install "$pkg" > /dev/null 2>&1; then
-                        echo -e "\033[0;32m=>\033[0m Installed $pkg"
-                    else
-                        if cargo install "$pkg" > /dev/null 2>&1; then
-                            echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                    #if sudo port install "$pkg" > /dev/null 2>&1; then
+                    #    echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                    #else
+                        if sudo -u $user cargo install "$pkg" > /dev/null 2>&1; then
+                            echo -e "\033[0;32m=>\033[0m Installed $pkg with cargo"
                         else
-                            if python -m pip install "$pkg" > /dev/null 2>&1; then
-                                echo -e "\033[0;32m=>\033[0m Installed $pkg"
-                            else
-                                if npm install -g "$pkg" > /dev/null 2>&1; then
-                                    echo -e "\033[0;32m=>\033[0m Installed $pkg"
-                                else
+                            #if sudo -u $user python -m pip install "$pkg" > /dev/null 2>&1; then
+                            #    echo -e "\033[0;32m=>\033[0m Installed $pkg with pip"
+                            #else
+                                #if sudo -u $user npm install -g "$pkg" > /dev/null 2>&1; then
+                                #    echo -e "\033[0;32m=>\033[0m Installed $pkg with npm"
+                                #else
                                     echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
                                     return 1
-                                fi
-                            fi
+                                #fi
+                            #fi
                         fi
-                    fi
+                    #fi
                 fi
-            fi
+            #fi
         fi
     done
 }
@@ -85,17 +88,19 @@ packagemanager-install () {
 ##### main #####
 id=$(id -u)
 if [ $id -eq 0 ]; then
-    if [ "$1" == "shin-update" ] || [ "$1" == "-us" ] || [ "$1" == "-su" ]; then
-        shin-update
-    elif [ "$1" == "update" ] || [ "$1" == "-u" ] || [ "$1" == "-u" ]; then
-        update
-    elif [ "$1" == "install" ] || [ "$1" == "-i" ] ; then
-        install ${@:2}
-    elif [ "$1" == "pkgman-install" ] || [ "$1" == "-pi" ] || [ "$1" == "-ip" ]; then
-        packagemanager-install ${@:2}
-    else
-        echo "Error: Invalid argument"
-    fi
+    case $1 in
+        shin-update)    shin-update ;;
+        -us)            shin-update ;;
+        -su)            shin-update ;;
+        update)         update ;;
+        -u)             update ;;
+        install)        install "${@:2}" ;;
+        -i)             install "${@:2}" ;;
+        pkgman-install) packagemanager-install ${@:2} ;;
+        -pi)            packagemanager-install ${@:2} ;;
+        -ip)            packagemanager-install ${@:2} ;;
+        *) echo "Error: Invalid argument" ;;
+    esac
 else
     echo "Shin must be run as root"
 fi
