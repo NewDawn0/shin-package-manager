@@ -2,15 +2,16 @@
 source $HOME/.ndos/shin/shin.config
 source $HOME/.ndos/shin/shinVersion.config
 update () {
-    echo -ne "\033[0;36m=> Upadting 0/7 \033[0m\r"
-    brew update > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 1/7\033[0m\r"
-    brew upgrade > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 2/7\033[0m\r"
-    indiepkg update > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 3/7\033[0m\r"
-    npm install -g npm@latest > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 4/7\033[0m\r"
-    npm update -g > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 5/7\033[0m\r"
-    sudo port selfupdate > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 6/7\033[0m\r"
-    sudo port upgrade outdated > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 7/7\033[0m\r"
-    echo -ne "\033[0;32m=> Updated all package \033[0m\r"
+    echo -ne "\033[0;36m=> \033[0mUpadting 0/7\r"
+    brew update > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 1/7\033[0m\r"
+    brew upgrade > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 2/7\033[0m\r"
+    indiepkg update > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 3/7\033[0m\r"
+    npm install -g npm > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 4/7\r"
+    npm update -g > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 5/7\r"
+    sudo port selfupdate > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 6/7\r"
+    sudo port upgrade outdated > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 7/7\r"
+    echo "\033[0;32m=> \033[0mUpdated all packages\r"
+    echo ""
 }
 shin-update () {
     wget https://raw.githubusercontent.com/NewDawn0/shin/main/shin > /dev/null 2>&1
