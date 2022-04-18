@@ -14,7 +14,7 @@ update () {
 }
 ## main
 id=$(id -u)
-fi [ $id -eq 0 ]; then
+if [ $id -eq 0 ]; then
     if [ "$1" == "shin-update" ] || [ "$1" == "-us" ] || [ "$1" == "-su" ]; then
         update
     else
