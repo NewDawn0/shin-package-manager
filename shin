@@ -2,6 +2,21 @@
 source $HOME/.ndos/shin/shin.config
 source $HOME/.ndos/shin/shinVersion.config
 update () {
+    echo -ne "\033[0;36m=> Upadting 0/9 \033[0m\r"
+    brew update > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 1/9\033[0m\r"
+    brew upgrade > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 2/9\033[0m\r"
+    indiepkg update > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 3/9\033[0m\r"
+    npm install -g npm@latest > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 4/9\033[0m\r"
+    npm update -g > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 5/9\033[0m\r"
+    wget https://github.com/macports/macports-base/releases/download/v2.7.2/MacPorts-2.7.2.tar.gz > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 6/9\033[0m\r"
+    tar xzvf MacPorts-2.7.2.tar.gz > /dev/null 2>&1 echo -ne "\033[0;36m=> Upadting 7/9\033[0m\r"
+    cd MacPorts-2.7.2
+    ./configure && make && sudo make install > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 8/9\033[0m\r"
+    cd ../
+    rm -rf MacPorts-2.7.2* > /dev/null 2>&1 && echo -ne "\033[0;36m=> Upadting 9/9\033[0m\r"
+    echo -ne "\033[0;32m=> Updated all package \033[0m\r"
+}
+shin-update () {
     wget https://raw.githubusercontent.com/NewDawn0/shin/main/shin > /dev/null 2>&1
     wget https://raw.githubusercontent.com/NewDawn0/shin/main/configs/shinVersion.config > /dev/null 2>&1
     mv shin.1 shin && chmod +x shin
@@ -11,11 +26,14 @@ update () {
     echo -e "\033[0;36mSuccessfully updated to       \033[0m"
     echo -e "\033[0;36m$(figlet "Shin v$version")       \033[0m"
     echo ""
+    update
 }
 ## main
 id=$(id -u)
 if [ $id -eq 0 ]; then
     if [ "$1" == "shin-update" ] || [ "$1" == "-us" ] || [ "$1" == "-su" ]; then
+        shin-update
+    elif [ "$1" == "update" ] || [ "$1" == "-u" ] || [ "$1" == "-u" ]; then
         update
     else
         echo "Error: Invalid argument"
