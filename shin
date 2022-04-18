@@ -84,7 +84,7 @@ listInsalled () {
 remove () {
     uninstallFromlist() {
         pkg=$1
-        lineNumbeer=$(cat  $HOME/.ndos/shin/packages.txt | grep -n $pkg | awk -F ":" '{print $1}')
+        lineNumber=$(cat  $HOME/.ndos/shin/packages.txt | grep -n $pkg | awk -F ":" '{print $1}')
         buffer=$(sed "${lineNumber}d" $HOME/.ndos/shin/packages.txt)
         cat /dev/null > $HOME/.ndos/shin/packages.txt
         for line in $buffer; do
