@@ -69,7 +69,7 @@ install () {
                                     echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
                                 fi
                             fi
-                        fi                    #fi
+                        fi
                     fi
                 fi
             fi
