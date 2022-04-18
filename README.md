@@ -1,5 +1,6 @@
 # shin
-A universal package manager
+One to unite them all
+(a universal package manager)
 
 ### Table of contents
 - General
