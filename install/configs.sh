@@ -9,9 +9,11 @@ echo "Installing configs ..."
 this=$(pwd)
 cd $HOME
 sudo mkdir -p .ndos/shin
-sudo cp $this/configs/shin.config .ndos/shin/
-sudo cp $this/configs/shinVersion.config .ndos/shin/
+sudo cp $this/configs/shin.config $HOME/.ndos/shin/
+sudo cp $this/configs/shinVersion.config $HOME/.ndos/shin/
 sudo cp $this/shin /usr/local/bin
+sudo touch $HOME/.ndos/shin/packages.txt
 echo "Please enter your username"
 read name
+name=$(echo $name | tr '[:upper:]' '[:lower:]')
 echo user=$name  >> $HOME/.ndos/shin/shin.config

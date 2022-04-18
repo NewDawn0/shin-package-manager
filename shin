@@ -2,19 +2,18 @@
 ##### sources #####
 source $HOME/.ndos/shin/shin.config
 source $HOME/.ndos/shin/shinVersion.config
-
 ##### updater #####
 update () {
-    echo -ne "\033[0;36m=> \033[0mUpadting 0/7\r"
-    brew update > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 1/8\033[0m\r"
-    brew upgrade > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 2/8\033[0m\r"
-    indiepkg update > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 3/8\033[0m\r"
-    npm install -g npm > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 4/8\r"
-    npm update -g > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 5/8\r"
+    echo -ne "\033[0;36m=> \033[0mUpadting 0/8\r"
+    sudo -u $user brew update > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 1/8\033[0m\r"
+    sudo -u $user brew upgrade > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 2/8\033[0m\r"
+    sudo -u $user indiepkg update > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 3/8\033[0m\r"
+    sudo -u $user npm install -g npm > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 4/8\r"
+    sudo -u $user npm update -g > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 5/8\r"
     sudo port selfupdate > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 6/8\r"
     sudo port upgrade outdated > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 7/8\r"
-    python -m pip install -–upgrade pip > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 8/8\r"
-    echo "\033[0;32m=> \033[0mUpdated all packages\r"
+    sudo -u $user python -m pip install -–upgrade pip > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 8/8\r"
+    echo -e "\033[0;32m=> \033[0mUpdated all packages\r"
     echo ""
 }
 shin-update () {
@@ -34,39 +33,38 @@ shin-update () {
 install () {
     for pkg in "$@"
     do
-        if sudo -u $user brew install "$pkg" > /dev/null 2>&1; then
-            echo -e "\033[0;32m=>\033[0m Installed $pkg with brew"
-            #echo $pkg >> $HOME/.ndos/shin/installed.packages
+        if sudo -u $user indiepkg install -y $pkg > /dev/null 2>&1; then
+            echo -e "\033[0;32m=>\033[0m Installed $pkg"
+            sudo echo "$pkg|indiepkg" >> $HOME/.ndos/shin/packages.txt
         else
-            #if sudo -u $user brew install cask $pkg > /dev/null 2>&1; then
-            #    echo -e "\033[0;32m=>\033[0m Installed $pkg with brew as app"
-            #else
-                echo "here :)"
-                sudo -u $user brew install cask $pkg
-                echo "here :("
-                if sudo -u $user indiepkg install -y "$pkg" > /dev/null 2>&1; then
-                    echo -e "\033[0;32m=>\033[0m Installed $pkg with indiepkg"
+            echo "here :("
+            if sudo -u $user brew install "$pkg" > /dev/null 2>&1; then
+                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt
+            else
+                if sudo port install "$pkg" > /dev/null 2>&1; then
+                    echo -e "\033[0;32m=>\033[0m Installed $pkg with port"
+                    sudo echo "$pkg|port" >> $HOME/.ndos/shin/packages.txt
                 else
-                    #if sudo port install "$pkg" > /dev/null 2>&1; then
-                    #    echo -e "\033[0;32m=>\033[0m Installed $pkg"
-                    #else
-                        if sudo -u $user cargo install "$pkg" > /dev/null 2>&1; then
-                            echo -e "\033[0;32m=>\033[0m Installed $pkg with cargo"
+                    if sudo -u $user cargo install "$pkg" > /dev/null 2>&1; then
+                        echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                        sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt
+                    else
+                        if sudo -u $user python -m pip install "$pkg" > /dev/null 2>&1; then
+                            echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                            sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt
                         else
-                            #if sudo -u $user python -m pip install "$pkg" > /dev/null 2>&1; then
-                            #    echo -e "\033[0;32m=>\033[0m Installed $pkg with pip"
-                            #else
-                                #if sudo -u $user npm install -g "$pkg" > /dev/null 2>&1; then
-                                #    echo -e "\033[0;32m=>\033[0m Installed $pkg with npm"
-                                #else
-                                    echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
-                                    return 1
-                                #fi
-                            #fi
+                            if sudo -u $user npm install -g "$pkg" > /dev/null 2>&1; then
+                                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                                sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt
+                            else
+                                echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
+                                return 1
+                            fi
                         fi
-                    #fi
+                    fi                    #fi
                 fi
-            #fi
+            fi
         fi
     done
 }
@@ -75,14 +73,17 @@ packagemanager-install () {
     all=${@:2}
     for pkg in $all; do
         case $manager in
-            brew)   brew install $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-            indiepkg) indiepkg install -y $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-            port)   sudo port install $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-            cargo)  cargo install $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-            npm)    npm install -g $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-            pip)    python -m pip install $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            brew)       sudo -u $user brew install $pkg > /dev/null 2>&1 && sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            indiepkg)   sudo -u $user indiepkg install -y $pkg > /dev/null 2>&1 && sudo echo "$pkg|indiepkg" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            port)       sudo -u $user sudo port install $pkg > /dev/null 2>&1 && sudo echo "$pkg|port" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            cargo)      sudo -u $user cargo install $pkg > /dev/null 2>&1 && sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            npm)        sudo -u $user npm install -g $pkg > /dev/null 2>&1 && sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            pip)        sudo -u $user python -m pip install $pkg > /dev/null 2>&1 && sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
         esac
     done
+}
+listInsalled () {
+    cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}'
 }
 
 ##### main #####
@@ -94,6 +95,8 @@ if [ $id -eq 0 ]; then
         -su)            shin-update ;;
         update)         update ;;
         -u)             update ;;
+        -l)             listInsalled ;;
+        list)           listInsalled ;;
         install)        install "${@:2}" ;;
         -i)             install "${@:2}" ;;
         pkgman-install) packagemanager-install ${@:2} ;;
