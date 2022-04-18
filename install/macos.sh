@@ -47,6 +47,7 @@ installation () {
             echo -e "\033[0;36m=>\033[0m Installing Python ..."
             echo -e "\033[0;36m=>\033[0m This might take a while"
             brew install python > /dev/null 2>&1
+            brew install python3 > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed Python"
         else
             echo -e "\033[0;32m=>\033[0m Python"
@@ -140,6 +141,7 @@ installation () {
     sudo mkdir -p .ndos/shin
     sudo cp $this/configs/shin.config .ndos/shin/
     sudo cp $this/configs/shinVersion.config .ndos/shin/
+    sudo cp $this/shin /usr/local/bin
 }
  
 ####### Update
@@ -150,9 +152,4 @@ update () {
     indiepkg upgrade && indiepkg update
 }
 
-########### MAIN ###########
-####### Installation
 installation
-
-####### Update
-#update

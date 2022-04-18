@@ -6,13 +6,14 @@ source $HOME/.ndos/shin/shinVersion.config
 ##### updater #####
 update () {
     echo -ne "\033[0;36m=> \033[0mUpadting 0/7\r"
-    brew update > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 1/7\033[0m\r"
-    brew upgrade > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 2/7\033[0m\r"
-    indiepkg update > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 3/7\033[0m\r"
-    npm install -g npm > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 4/7\r"
-    npm update -g > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 5/7\r"
-    sudo port selfupdate > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 6/7\r"
-    sudo port upgrade outdated > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 7/7\r"
+    brew update > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 1/8\033[0m\r"
+    brew upgrade > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 2/8\033[0m\r"
+    indiepkg update > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 3/8\033[0m\r"
+    npm install -g npm > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 4/8\r"
+    npm update -g > /dev/null 2>&1 && echo -ne "\033[0;36m=>\033[0m Upadting 5/8\r"
+    sudo port selfupdate > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 6/8\r"
+    sudo port upgrade outdated > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 7/8\r"
+    python -m pip install -–upgrade pip > /dev/null 2>&1 && echo -ne "\033[0;36m=> \033[0mUpadting 8/8\r"
     echo "\033[0;32m=> \033[0mUpdated all packages\r"
     echo ""
 }
@@ -54,6 +55,20 @@ install () {
         fi
     done
 }
+packagemanager-install () {
+    manager=$1
+    all=${@:2}
+    for pkg in $all; do
+        case $manager in
+            brew)   brew install $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            indiepkg) indiepkg install -y $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            port)   sudo port install $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            cargo)  cargo install $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            npm)    npm install -g $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+            pip)    python -m pip install $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+        esac
+    done
+}
 
 ##### main #####
 id=$(id -u)
@@ -63,8 +78,9 @@ if [ $id -eq 0 ]; then
     elif [ "$1" == "update" ] || [ "$1" == "-u" ] || [ "$1" == "-u" ]; then
         update
     elif [ "$1" == "install" ] || [ "$1" == "-i" ] ; then
-        all=$(echo $*)
         install ${@:2}
+    elif [ "$1" == "pkgman-install" ] || [ "$1" == "-pi" ] || [ "$1" == "-ip" ]; then
+        packagemanager-install ${@:2}
     else
         echo "Error: Invalid argument"
     fi
