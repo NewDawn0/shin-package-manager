@@ -36,19 +36,31 @@ install () {
     do
         if brew install $pkg > /dev/null 2>&1; then
             echo -e "\033[0;32m=>\033[0m Installed $pkg"
-            echo $pkg >> $HOME/.ndos/shin/installed.packages
+            #echo $pkg >> $HOME/.ndos/shin/installed.packages
         else
-            if indiepkg install -y $pkg > /dev/null 2>&1; then
+            if brew install --cask $pkg > /dev/null 2>&1; then
                 echo -e "\033[0;32m=>\033[0m Installed $pkg"
             else
-                if sudo port install $pkg > /dev/null 2>&1; then
+                if indiepkg install -y $pkg > /dev/null 2>&1; then
                     echo -e "\033[0;32m=>\033[0m Installed $pkg"
                 else
-                    if cargo install $pkg > /dev/null 2>&1; then
+                    if sudo port install $pkg > /dev/null 2>&1; then
                         echo -e "\033[0;32m=>\033[0m Installed $pkg"
                     else
-                        echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
-                        return 1
+                        if cargo install $pkg > /dev/null 2>&1; then
+                            echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                        else
+                            if python -m pip install $pkg > /dev/null 2>&1; then
+                                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                            else
+                                if npm install -g $pkg > /dev/null 2>&1; then
+                                    echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                                else
+                                    echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
+                                    return 1
+                                fi
+                            fi
+                        fi
                     fi
                 fi
             fi
