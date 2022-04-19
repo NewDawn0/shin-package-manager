@@ -5,7 +5,7 @@ Shin is a crosslatform package manager
 ## Supported Operating Systems
 - Mac OS (OSX)
 - Arch and [Arch based systems](https://wiki.archlinux.org/title/Arch-based_distributions#Active)
-- Debian and [Arch based systems](https://distrowatch.com/search.php?basedon=Debian)
+- Debian and [Debian based systems](https://distrowatch.com/search.php?basedon=Debian)
 
 
 ### Table of contents
