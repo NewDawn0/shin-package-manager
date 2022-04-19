@@ -120,6 +120,7 @@ installation () {
             echo -e "\033[0;32m=>\033[0m wget"
         fi
     }
+    # installing package managers and dependencies
     echo "Checking and installing dependencies ..."
     brew
     wget
@@ -130,6 +131,14 @@ installation () {
     npm
     indiepkg
     figlet
+    # adding package manager to managers list
+    sudo echo "Managers  |      Full Name/Description" >> $HOME/.ndos/shin/managers.txt
+    sudo echo "brew     ->      Homebrew" >> $HOME/.ndos/shin/managers.txt
+    sudo echo "port     ->      macPorts" >> $HOME/.ndos/shin/managers.txt
+    sudo echo "cargo    ->      Rust Cargo" >> $HOME/.ndos/shin/managers.txt
+    sudo echo "indiepkg ->      Indiepkg" >> $HOME/.ndos/shin/managers.txt
+    sudo echo "npm      ->      NodeJS" >> $HOME/.ndos/shin/managers.txt
+    sudo echo "pip      ->      Python - Pip" >> $HOME/.ndos/shin/managers.txt
 }
 
 installation
