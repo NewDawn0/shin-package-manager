@@ -46,27 +46,37 @@ install () {
                 echo -e "\033[0;32m=>\033[0m Installed $pkg"
                 sudo echo "$pkg|indiepkg" >> $HOME/.ndos/shin/packages.txt
             else
-                if sudo -u $user brew install "$pkg" > /dev/null 2>&1; then
+                if yes | sudo pacman -S "$pkg" > /dev/null 2>&1; then
                     echo -e "\033[0;32m=>\033[0m Installed $pkg"
-                    sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt
+                    sudo echo "$pkg|pacman" >> $HOME/.ndos/shin/packages.txt
                 else
-                    if sudo port install "$pkg" > /dev/null 2>&1; then
+                    if sudo -u $user brew install "$pkg" > /dev/null 2>&1; then
                         echo -e "\033[0;32m=>\033[0m Installed $pkg"
-                        sudo echo "$pkg|port" >> $HOME/.ndos/shin/packages.txt
+                        sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt
                     else
-                        if sudo -u $user cargo install "$pkg" > /dev/null 2>&1; then
+                        if yes | yay -S "$pkg" > /dev/null 2>&1; then
                             echo -e "\033[0;32m=>\033[0m Installed $pkg"
-                            sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt
+                            sudo echo "$pkg|yay" >> $HOME/.ndos/shin/packages.txt
                         else
-                            if sudo -u $user python -m pip install "$pkg" > /dev/null 2>&1; then
+                            if sudo port install "$pkg" > /dev/null 2>&1; then
                                 echo -e "\033[0;32m=>\033[0m Installed $pkg"
-                                sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt
+                                sudo echo "$pkg|port" >> $HOME/.ndos/shin/packages.txt
                             else
-                                if sudo -u $user npm install -g "$pkg" > /dev/null 2>&1; then
+                                if sudo -u $user cargo install "$pkg" > /dev/null 2>&1; then
                                     echo -e "\033[0;32m=>\033[0m Installed $pkg"
-                                    sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt
+                                    sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt
                                 else
-                                    echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
+                                    if sudo -u $user python -m pip install "$pkg" > /dev/null 2>&1; then
+                                        echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                                        sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt
+                                    else
+                                        if sudo -u $user npm install -g "$pkg" > /dev/null 2>&1; then
+                                            echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                                            sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt
+                                        else
+                                            echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
+                                        fi
+                                    fi
                                 fi
                             fi
                         fi
@@ -95,6 +105,8 @@ packagemanager-install () {
                 cargo)      sudo -u $user cargo install $pkg > /dev/null 2>&1 && sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
                 npm)        sudo -u $user npm install -g $pkg > /dev/null 2>&1 && sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
                 pip)        sudo -u $user python -m pip install $pkg > /dev/null 2>&1 && sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+                yay)        yes | sudo yay -S $pkg > /dev/null 2>&1 && sudo echo "$pkg|yay" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+                pacman)     yes | sudo pacman -S $pkg > /dev/null 2>&1 && sudo echo "$pkg|pacman" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
             esac
         fi
     done
