@@ -54,7 +54,7 @@ install () {
                         echo -e "\033[0;32m=>\033[0m Installed $pkg"
                         sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt
                     else
-                        if yes | yay -S "$pkg" > /dev/null 2>&1; then
+                        if yes | sudo yay -S "$pkg" > /dev/null 2>&1; then
                             echo -e "\033[0;32m=>\033[0m Installed $pkg"
                             sudo echo "$pkg|yay" >> $HOME/.ndos/shin/packages.txt
                         else
@@ -141,6 +141,8 @@ remove () {
             cargo)      sudo -u $user cargo uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
             npm)        sudo -u $user npm uninstall -g $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
             pip)        sudo -u $user python -m pip uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
+            yay)        yes | sudo yay -Rns $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
+            pacman)     yes | sudo pacman -Rns $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
             *)          echo -e "\033[0;36m=>\033[0m No package named $pkg is installed" ;;
         esac
     }
