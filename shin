@@ -99,14 +99,14 @@ packagemanager-install () {
             echo -e "\033[0;36m=>\033[0m $pkg is already installed"
         else
             case $manager in
-                brew)       sudo -u $user brew install $pkg > /dev/null 2>&1 && sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-                indiepkg)   sudo -u $user indiepkg install -y $pkg > /dev/null 2>&1 && sudo echo "$pkg|indiepkg" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-                port)       sudo port install $pkg > /dev/null 2>&1 && sudo echo "$pkg|port" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-                cargo)      sudo -u $user cargo install $pkg > /dev/null 2>&1 && sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-                npm)        sudo -u $user npm install -g $pkg > /dev/null 2>&1 && sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-                pip)        sudo -u $user python -m pip install $pkg > /dev/null 2>&1 && sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-                yay)        yes | sudo yay -S $pkg > /dev/null 2>&1 && sudo echo "$pkg|yay" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
-                pacman)     yes | sudo pacman -S $pkg > /dev/null 2>&1 && sudo echo "$pkg|pacman" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg" ;;
+                brew)       if cat  $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then sudo -u $user brew install $pkg > /dev/null 2>&1 && sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo "Package manager $manager is not installed" && echo "Run 'sudo shin -lpm' to view all installed package managers"; fi  ;;
+                indiepkg)   if cat  $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then sudo -u $user indiepkg install -y $pkg > /dev/null 2>&1 && sudo echo "$pkg|indiepkg" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo "Package manager $manager is not installed" && echo "Run 'sudo shin -lpm' to view all installed package managers"; fi  ;;
+                port)       if cat  $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then sudo port install $pkg > /dev/null 2>&1 && sudo echo "$pkg|port" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo "Package manager $manager is not installed" && echo "Run 'sudo shin -lpm' to view all installed package managers"; fi  ;;
+                cargo)      if cat  $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then sudo -u $user cargo install $pkg > /dev/null 2>&1 && sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo "Package manager $manager is not installed" && echo "Run 'sudo shin -lpm' to view all installed package managers"; fi  ;;
+                npm)        if cat  $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then sudo -u $user npm install -g $pkg > /dev/null 2>&1 && sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo "Package manager $manager is not installed" && echo "Run 'sudo shin -lpm' to view all installed package managers"; fi  ;;
+                pip)        if cat  $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then sudo -u $user python -m pip install $pkg > /dev/null 2>&1 && sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo "Package manager $manager is not installed" && echo "Run 'sudo shin -lpm' to view all installed package managers"; fi  ;;
+                yay)        if cat  $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then yes | sudo yay -S $pkg > /dev/null 2>&1 && sudo echo "$pkg|yay" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo "Package manager $manager is not installed" && echo "Run 'sudo shin -lpm' to view all installed package managers"; fi  ;;
+                pacman)     if cat  $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then yes | sudo pacman -S $pkg > /dev/null 2>&1 && sudo echo "$pkg|pacman" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo "Package manager $manager is not installed" && echo "Run 'sudo shin -lpm' to view all installed package managers"; fi ;;
             esac
         fi
     done
@@ -116,6 +116,9 @@ packagemanager-install () {
 # list installed packages
 listInsalled () {
     cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}'
+}
+listManagers () {
+    cat  $HOME/.ndos/shin/managers.txt
 }
 
 ##### remove #####
@@ -152,29 +155,38 @@ remove () {
         uninstallFromlist $pkg
     done
 }
-
+shin-test () {
+    manager=$1
+    if cat  $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then echo "test"; else echo "Package manager $manager is not installed" && echo "Run 'sudo shin -lpm' to view all installed package managers"; fi
+}
 ##### main #####
 # check for root privileges
 id=$(id -u)
 if [ $id -eq 0 ]; then
     # check flags
     case $1 in
-        shin-update)    shin-update ;;
-        -us)            shin-update ;;
-        -su)            shin-update ;;
-        update)         update ;;
-        -u)             update ;;
-        -l)             listInsalled ;;
-        list)           listInsalled ;;
-        -rm)            remove "${@:2}" ;;
-        remove)         remove "${@:2}" ;;
-        uninstall)      remove "${@:2}" ;;
-        -r)             remove "${@:2}" ;;
-        install)        install "${@:2}" ;;
-        -i)             install "${@:2}" ;;
-        pkgman-install) packagemanager-install ${@:2} ;;
-        -pi)            packagemanager-install ${@:2} ;;
-        -ip)            packagemanager-install ${@:2} ;;
+        shin-update)            shin-update ;;
+        -us)                    shin-update ;;
+        -su)                    shin-update ;;
+        test)                   shin-test $2 ;;
+        update)                 update ;;
+        -u)                     update ;;
+        -l)                     listInsalled ;;
+        list)                   listInsalled ;;
+        list-packages)          listInsalled ;;
+        list-managers)          listManagers ;;
+        list-package-managers)  listManagers ;;
+        -lm)                    listManagers ;;
+        -lpm)                   listManagers ;;
+        -rm)                    remove "${@:2}" ;;
+        remove)                 remove "${@:2}" ;;
+        uninstall)              remove "${@:2}" ;;
+        -r)                     remove "${@:2}" ;;
+        install)                install "${@:2}" ;;
+        -i)                     install "${@:2}" ;;
+        pkgman-install)         packagemanager-install ${@:2} ;;
+        -pi)                    packagemanager-install ${@:2} ;;
+        -ip)                    packagemanager-install ${@:2} ;;
         *) echo "Error: Invalid argument" ;;
     esac
 else
