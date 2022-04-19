@@ -1,6 +1,12 @@
 # shin
-"One to bind them all"
-(a universal package manager)
+"One to bind them all"</br>
+Shin is a crosslatform package manager
+
+## Supported Operating Systems
+- Mac OS (OSX)
+- Arch and [Arch based systems](https://wiki.archlinux.org/title/Arch-based_distributions#Active)
+- Debian and [Debian based systems](https://distrowatch.com/search.php?basedon=Debian)
+
 
 ### Table of contents
 - General
@@ -12,7 +18,10 @@
 
 ## General
 ### Explanation
-Shin is a general purpose package manager for my custom ndos packages as well as a wrapper for other package managers, so only one command is needed to do the package managing.
+Shin is a crossplatform package manager and wrapper for other platform managers</br>
+Shin searches through every supported package manager on the system and will install the package</br>
+meaning that only one install command is needed to install packages with different package managers</br>
+But Shin also supports the option of choosing the package manager that the packages will be installed with </br>
 
 Explanation with examples: </br>
 `shin install skyfetch` or `shin -i skyfetch`</br>
