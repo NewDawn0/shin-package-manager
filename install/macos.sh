@@ -132,7 +132,7 @@ installation () {
     indiepkg
     figlet
     # adding package manager to managers list
-    sudo echo "Managers  |      Full Name/Description" >> $HOME/.ndos/shin/managers.txt
+    sudo echo "Managers         Full Name/Description" >> $HOME/.ndos/shin/managers.txt
     sudo echo "brew     ->      Homebrew" >> $HOME/.ndos/shin/managers.txt
     sudo echo "port     ->      macPorts" >> $HOME/.ndos/shin/managers.txt
     sudo echo "cargo    ->      Rust Cargo" >> $HOME/.ndos/shin/managers.txt
