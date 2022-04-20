@@ -19,15 +19,16 @@ update () {
     echo -ne "\033[0;36m=>\033[0m Upadting 5/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep port > /dev/null 2>&1; then sudo port selfupdate > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 6/12\r"
-    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo port upgrade outdated > /dev/null 2>&1; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U > /dev/null 2>&1; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 python -m pip install -U > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 7/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user python -m pip install -–upgrade pip > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 8/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep apt > /dev/null 2>&1; then sudo apt update && sudo apt upgrade -y > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 9/12\r"
-    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pacman > /dev/null 2>&1; then sudo -u $user sudo pacman -Syu > /dev/null 2>&1; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pacman > /dev/null 2>&1; then sudo pacman -Syu > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 10/12\r"
-    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep yay > /dev/null 2>&1; then sudo -u $user sudo yay -Syu > /dev/null 2>&1; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep yay > /dev/null 2>&1; then sudo yay -Syu > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 11/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep brew > /dev/null 2>&1; then sudo -u $user brew cleanup > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 12/12\r"
@@ -247,12 +248,28 @@ remove () {
         uninstallFromlist $pkg
     done
 }
+##### query #####
+query () {
+    query=$1
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep brew > /dev/null 2>&1; then sudo -u $user brew search $query | grep -v Casks | grep -v Formulae >> $HOME/.ndos/shin/query.txt; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep indiepkg > /dev/null 2>&1; then sudo -u $user indiepkg search $query | grep -v '[!]' | awk '{print $1}' >> $HOME/.ndos/shin/query.txt; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep npm > /dev/null 2>&1; then sudo -u $user npm search $query | grep -v NAME | awk '{print $1}' | grep -v "No" >> $HOME/.ndos/shin/query.txt; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep port > /dev/null 2>&1; then sudo -u $user port search $query  | awk 'NR % 3 == 1' | awk '{print $1}' | sed \$d >> $HOME/.ndos/shin/query.txt; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user pip_search $query | awk '{print $3}' | grep -v "│" | tail -n +5 | sed \$d >> $HOME/.ndos/shin/query.txt; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep apt > /dev/null 2>&1; then sudo -u $user apt search $query | tail -n +3 | awk 'NR % 3 == 1' | awk '{print $1}' >> $HOME/.ndos/shin/query.txt; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pacman > /dev/null 2>&1; then sudo pacman -Q $query | awk '{print $1}' | grep -v error >> $HOME/.ndos/shin/query.txt; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep yay > /dev/null 2>&1; then sudo yay -Q | awk '{print $1}' | grep -v error >> /dev/null 2>&1; fi
+    cat $HOME/.ndos/shin/query.txt | sort -u
+    echo -e "\033[0;32m=>\033[0m $(cat $HOME/.ndos/shin/query.txt | sort -u | wc -l) packages found"
+}
 ##### main #####
 # check for root privileges
 id=$(id -u)
 if [ $id -eq 0 ]; then
     # check flags
     case $1 in
+        query)                  query $2 ;;
+        -q)                     query $2 ;;
         shin-update)            shin-update ;;
         -us)                    shin-update ;;
         -su)                    shin-update ;;

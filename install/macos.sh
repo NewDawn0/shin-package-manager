@@ -120,8 +120,9 @@ installation () {
             echo -e "\033[0;32m=>\033[0m wget"
         fi
     }
-    # installing package managers and dependencies
     echo "Checking and installing dependencies ..."
+    python -m pip install pip_search
+    pip install pip_search > /dev/null 2>&1
     brew
     wget
     cmake
