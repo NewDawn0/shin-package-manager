@@ -15,6 +15,7 @@ def getDist ():
 
 if platform != "win32":
     if platform == "darwin":
+        print("Platform: macOS (detected)")
         os.system('sudo bash install/configs.sh $(pwd)')
         os.system('sudo bash install/macos.sh')
     elif platform == "linux":
@@ -31,11 +32,11 @@ if platform != "win32":
                 print("Enter a valid number")
                 continue
         if intValue == 1:
-            print("os.system('sudo bash install/configs.sh')")
-            print("os.system('sudo bash install/arch.sh')")
+            os.system('sudo bash install/configs.sh $(pwd)')
+            os.system('sudo bash install/arch.sh')
         elif intValue == 2:
-            print("os.system('sudo bash install/configs.sh')")
-            print("os.system('sudo bash install/debian.sh')")
+            os.system('sudo bash install/configs.sh $(pwd)')
+            os.system('sudo bash install/debian.sh')
         else:
             print("Something went wrong")
             print("Aborting...")
