@@ -19,10 +19,8 @@ update () {
     echo -ne "\033[0;36m=>\033[0m Upadting 5/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep port > /dev/null 2>&1; then sudo port selfupdate > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 6/12\r"
-    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U > /dev/null 2>&1; fi
-    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 python -m pip install -U > /dev/null 2>&1; fi
+    #if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 7/12\r"
-    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user python -m pip install -–upgrade pip > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 8/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep apt > /dev/null 2>&1; then sudo apt update && sudo apt upgrade -y > /dev/null 2>&1; fi
     echo -ne "\033[0;36m=> \033[0mUpadting 9/12\r"

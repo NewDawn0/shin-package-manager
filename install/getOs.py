@@ -11,13 +11,11 @@ def getDist ():
     print("     https://wiki.archlinux.org/title/Arch-based_distributions#Active")
     print("     https://distrowatch.com/search.php?basedon=Debian")
     print("")
-
-
 if platform != "win32":
     if platform == "darwin":
         print("Platform: macOS (detected)")
         os.system('sudo bash install/configs.sh $(pwd)')
-        os.system('sudo bash install/macos.sh')
+        os.system('sudo bash install/macos.sh $(pwd)')
     elif platform == "linux":
         print("Platform: linux (detected)")
         print("Enter the type of linux distribution")

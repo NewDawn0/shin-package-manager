@@ -36,18 +36,6 @@ installation () {
             echo -e "\033[0;32m=>\033[0m Go"
         fi
     }
-    python () {
-        which -s python
-        if [[ $? != 0 ]] ; then
-            echo -e "\033[0;36m=>\033[0m Installing Python ..."
-            echo -e "\033[0;36m=>\033[0m This might take a while"
-            sudo -u $user brew install python > /dev/null 2>&1
-            sudo -u $user brew install python3 > /dev/null 2>&1
-            echo -e "\033[0;32m=>\033[0m Installed Python"
-        else
-            echo -e "\033[0;32m=>\033[0m Python"
-        fi
-    }
     ports () {
         which -s port
         if [[ $? != 0 ]] ; then
@@ -77,12 +65,9 @@ installation () {
         which -s indiepkg
         if [[ $? != 0 ]] ; then
             echo -e "\033[0;36m=>\033[0m Installing Indiepkg ..."
-            echo -e "\033[0;36m=>\033[0m This might take a while"
-            sudo -u $user git clone https://github.com/talwat/indiepkg.git > /dev/null 2>&1
-            sudo -u $user cd indiepkg > /dev/null 2>&1
-            sudo -u $user make > /dev/null 2>&1
-            sudo -u $user make install > /dev/null 2>&1
-            echo -e "\033[0;32m=>\033[0m Installed Indiepkg"
+            
+            sudo -u $user git clone https://github.com/talwat/indiepkg.git
+            echo -e "\033[0;36m=>\033[0m Error installing please run 'cd indiepkg && make && make install' in this directory" 
         else
             echo -e "\033[0;32m=>\033[0m Indiepkg"
         fi
@@ -90,8 +75,8 @@ installation () {
     npm () {
         which -s npm
         if [[ $? != 0 ]] ; then
-            echo -e "Installing NodeJS/npm ..."
-            echo -e "This might take a while"
+            echo -e "\033[0;36m=>\033[0mInstalling NodeJS/npm ..."
+            echo -e "\033[0;36m=>\033[0mThis might take a while"
             sudo -u $user brew install node > /dev/null 2>&1
             echo -e "\033[0;32m=>\033[0m Installed Npm"
         else
@@ -121,7 +106,6 @@ installation () {
         fi
     }
     echo "Checking and installing dependencies ..."
-    python -m pip install pip_search
     pip install pip_search > /dev/null 2>&1
     brew
     wget
