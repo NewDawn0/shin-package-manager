@@ -236,7 +236,7 @@ remove () {
         pkg=$1
         manager=$(cat  $HOME/.ndos/shin/packages.txt | grep $pkg | awk -F "|" '{print $2}')
         case $manager in
-            brew)       sudo -u $user brew uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Unistalled $pkg" ;;
+            brew)       sudo -u $user brew uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
             indiepkg)   sudo -u $user indiepkg uninstall -y $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
             port)       sudo port uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
             cargo)      sudo -u $user cargo uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
