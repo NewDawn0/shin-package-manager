@@ -267,12 +267,59 @@ query () {
     cat $HOME/.ndos/shin/query.txt | sort -u
     echo -e "\033[0;32m=>\033[0m $(cat $HOME/.ndos/shin/query.txt | sort -u | wc -l) packages found"
 }
+#### help menu #####
+helpTxt () {
+cat <<EOF
+Shin Usage:
+sudo shin
+        -h
+        help
+
+        -q <package>
+        query <package>
+
+        -u
+        update
+
+        -su
+        -us
+        shin-update
+
+        -l
+        list
+        list-packages
+
+        -lm
+        -lpm
+        list-managers
+        list-package-managers
+
+        -la
+        list-all
+
+        -i <packages>
+        install <packages>
+
+        -r <packages>
+        -rm <packages>
+        remove <packages>
+
+        -pi <packages>
+        -ip <packages>
+        pkgman-install <packages>
+
+    For more info visit the wiki:
+    https://github.com/NewDawn0/shin-package-manager/wiki
+EOF
+}
 ##### main #####
 # check for root privileges
 id=$(id -u)
 if [ $id -eq 0 ]; then
     # check flags
     case $1 in
+        -h)                     helpTxt ;;
+        help)                   helpTxt ;;
         list-all)               listPackageWithManagers ;;
         -la)                    listPackageWithManagers ;;
         query)                  query $2 ;;
@@ -298,7 +345,8 @@ if [ $id -eq 0 ]; then
         pkgman-install)         packagemanager-install ${@:2} ;;
         -pi)                    packagemanager-install ${@:2} ;;
         -ip)                    packagemanager-install ${@:2} ;;
-        *) echo "Error: Invalid argument"
+        *) echo "Error: Invalid argument" && echo "" && helpTxt ;;
+        
     esac
 else
     echo "Shin requires root privileges"
