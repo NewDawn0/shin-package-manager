@@ -354,8 +354,6 @@ else
         help)                   helpTxt ;;
         list-all)               listPackageWithManagers ;;
         -la)                    listPackageWithManagers ;;
-        query)                  query $2 ;;
-        -q)                     query $2 ;;
         -l)                     listInsalled ;;
         list)                   listInsalled ;;
         list-packages)          listInsalled ;;
