@@ -215,7 +215,7 @@ listPackageWithManagers () {
     Packages=($(cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}'));
     Managers=($(cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $2}'));
     for i in "${!Packages[@]}"; do
-        echo -e "${Packages[$i]}     \t -->\t ${Managers[$i]}"
+        echo -e "${Managers[$i]}     \t -->\t      ${Packages[$i]}"
     done
 }
 
@@ -349,5 +349,20 @@ if [ $id -eq 0 ]; then
         
     esac
 else
-    echo "Shin requires root privileges"
+    case $1 in
+        -h)                     helpTxt ;;
+        help)                   helpTxt ;;
+        list-all)               listPackageWithManagers ;;
+        -la)                    listPackageWithManagers ;;
+        query)                  query $2 ;;
+        -q)                     query $2 ;;
+        -l)                     listInsalled ;;
+        list)                   listInsalled ;;
+        list-packages)          listInsalled ;;
+        list-managers)          listManagers ;;
+        list-package-managers)  listManagers ;;
+        -lm)                    listManagers ;;
+        -lpm)                   listManagers ;;
+        *)                      echo "Shin requires root privileges" ;;
+    esac
 fi
