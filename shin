@@ -6,30 +6,30 @@ source $HOME/.ndos/shin/shinVersion.config
 ##### updater #####
 # updates all packages
 update () {
-    echo -ne "\033[0;36m=> \033[0mUpadting 0/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 0/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep brew > /dev/null 2>&1; then sudo -u $user brew update > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=> \033[0mUpadting 1/12\033[0m\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 1/12\033[0m\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep brew > /dev/null 2>&1; then sudo -u $user brew upgrade > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=> \033[0mUpadting 2/12\033[0m\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 2/12\033[0m\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep indiepkg > /dev/null 2>&1; then sudo -u $user indiepkg update > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=>\033[0m Upadting 3/12\033[0m\r"
+    echo -ne "\033[0;33m=>\033[0m Upadting 3/12\033[0m\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep npm > /dev/null 2>&1; then sudo -u $user npm install -g npm > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=> \033[0mUpadting 4/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 4/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep npm > /dev/null 2>&1; then sudo -u $user npm update -g > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=>\033[0m Upadting 5/12\r"
+    echo -ne "\033[0;33m=>\033[0m Upadting 5/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep port > /dev/null 2>&1; then sudo port selfupdate > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=> \033[0mUpadting 6/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 6/12\r"
     #if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=> \033[0mUpadting 7/12\r"
-    echo -ne "\033[0;36m=> \033[0mUpadting 8/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 7/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 8/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep apt > /dev/null 2>&1; then sudo apt update && sudo apt upgrade -y > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=> \033[0mUpadting 9/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 9/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pacman > /dev/null 2>&1; then sudo pacman -Syu > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=> \033[0mUpadting 10/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 10/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep yay > /dev/null 2>&1; then sudo yay -Syu > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=> \033[0mUpadting 11/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 11/12\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep brew > /dev/null 2>&1; then sudo -u $user brew cleanup > /dev/null 2>&1; fi
-    echo -ne "\033[0;36m=> \033[0mUpadting 12/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 12/12\r"
     echo -e "\033[0;32m=> \033[0mUpdated all packages\r"
     echo ""
 }
