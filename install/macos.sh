@@ -106,7 +106,7 @@ installation () {
         fi
     }
     echo "Checking and installing dependencies ..."
-    pip install pip_search > /dev/null 2>&1
+    pip install poetry > /dev/null 2>&1
     brew
     wget
     cmake
