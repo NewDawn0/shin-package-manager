@@ -270,12 +270,13 @@ query () {
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep indiepkg > /dev/null 2>&1; then sudo -u $user indiepkg search $query | grep -v '[!]' | awk '{print $1}' >> $HOME/.ndos/shin/query.txt; fi
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep npm > /dev/null 2>&1; then sudo -u $user npm search $query | grep -v NAME | awk '{print $1}' | grep -v "No" >> $HOME/.ndos/shin/query.txt; fi
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep port > /dev/null 2>&1; then sudo -u $user port search $query  | awk 'NR % 3 == 1' | awk '{print $1}' | sed \$d >> $HOME/.ndos/shin/query.txt; fi
-    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user pip_search $query | awk '{print $3}' | grep -v "│" | tail -n +5 | sed \$d >> $HOME/.ndos/shin/query.txt; fi
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user poetry search $query | awk 'NR % 3 == 2' >> $HOME/.ndos/shin/query.txt; fi
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep apt > /dev/null 2>&1; then sudo -u $user apt search $query | tail -n +3 | awk 'NR % 3 == 1' | awk '{print $1}' >> $HOME/.ndos/shin/query.txt; fi
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pacman > /dev/null 2>&1; then sudo pacman -Q $query | awk '{print $1}' | grep -v error >> $HOME/.ndos/shin/query.txt; fi
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep yay > /dev/null 2>&1; then sudo yay -Q | awk '{print $1}' | grep -v error >> /dev/null 2>&1; fi
-    cat $HOME/.ndos/shin/query.txt | sort -u
-    echo -e "\033[0;32m=>\033[0m $(cat $HOME/.ndos/shin/query.txt | sort -u | wc -l) packages found"
+    cat $HOME/.ndos/shin/query.txt | grep $query | sort | uniq
+    pkgAmount=$(cat $HOME/.ndos/shin/query.txt | grep $query | sort | uniq | wc -l)
+    echo -e "\033[0;32m=>\033[0m $pkgAmount packages found"
 }
 #### help menu #####
 helpTxt () {
