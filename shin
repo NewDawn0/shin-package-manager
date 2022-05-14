@@ -53,9 +53,10 @@ shin-update () {
 install () {
     indiepkg () {
         pkg=$1
+        echo -en "\r\033[0;33m=> \033[0mInstalling $pkg"
         if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep indiepkg > /dev/null 2>&1; then
             if sudo -u $user indiepkg install -y $pkg > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e ""
                 sudo echo "$pkg|indiepkg" >> $HOME/.ndos/shin/packages.txt
             else
                 pacman $pkg
@@ -68,7 +69,7 @@ install () {
         pkg=$1
         if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pacman > /dev/null 2>&1; then
             if yes | sudo pacman -S "$pkg" > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e ""
                 sudo echo "$pkg|pacman" >> $HOME/.ndos/shin/packages.txt
             else
                 brew $pkg
@@ -81,7 +82,7 @@ install () {
         pkg=$1
         if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep brew > /dev/null 2>&1; then
             if sudo -u $user brew install "$pkg" > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e ""
                 sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt
             else
                 apt $pkg
@@ -94,7 +95,7 @@ install () {
         pkg=$1
         if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep apt > /dev/null 2>&1; then
             if sudo apt install > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg" && echo -e ""
                 sudo echo "$pkg|apt" >> $HOME/.ndos/shin/packages.txt
             else
                 yay $pkg
@@ -107,7 +108,7 @@ install () {
         pkg=$1
         if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep yay > /dev/null 2>&1; then
             if yes | yay -S "$pkg" > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e ""
                 sudo echo "$pkg|yay" >> $HOME/.ndos/shin/packages.txt
             else
                 port $pkg
@@ -120,7 +121,7 @@ install () {
         pkg=$1
         if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep port > /dev/null 2>&1; then
             if sudo port install > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e ""
                 sudo echo "$pkg|port" >> $HOME/.ndos/shin/packages.txt
             else
                 cargo $pkg
@@ -133,7 +134,7 @@ install () {
         pkg=$1
         if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep cargo > /dev/null 2>&1; then
             if sudo -u $user cargo install "$pkg" > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e ""
                 sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt
             else
                 pip $pkg
@@ -146,7 +147,7 @@ install () {
         pkg=$1
         if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then
             if sudo -u $user pip3 install "$pkg" > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e ""
                 sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt
             else
                 npm $pkg
@@ -159,18 +160,18 @@ install () {
         pkg=$1
         if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep npm > /dev/null 2>&1; then
             if sudo -u $user npm install -g "$pkg" > /dev/null 2>&1; then
-                echo -e "\033[0;32m=>\033[0m Installed $pkg"
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e ""
                 sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt
             else
-                echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
+                echo -en "\r\033[0;31m=>\033[0m No package was found named $pkg      " && echo -e ""
             fi
         else
-            echo -e "\033[0;36m=>\033[0m No package was found named $pkg"
+            echo -en "\r\033[0;31m=>\033[0m No package was found named $pkg      "  && echo -e ""
         fi
     }
     for pkg in "$@"; do
         if cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}' | grep $pkg > /dev/null 2>&1; then
-            echo -e "\033[0;36m=>\033[0m $pkg is already installed"
+            echo -e "\r\033[0;36m=>\033[0m $pkg is already installed      " && echo -e ""
         else
             indiepkg $pkg
         fi
@@ -188,34 +189,42 @@ packagemanager-install () {
         if cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}' | grep $pkg > /dev/null 2>&1; then
             echo -e "\033[0;36m=>\033[0m $pkg is already installed"
         else
+            echo -en "\r\033[0;33m=> \033[0mInstalling $pkg"
             case $manager in
-                brew)       if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user brew install $pkg > /dev/null 2>&1; then sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo -e "\033[0;36m=>\033[0m Package $pkg not found"; fi; else echo -e "\033[0;36m=> \033[0mPackage manager $manager is not installed" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
-                indiepkg)   if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user indiepkg install -y $pkg > /dev/null 2>&1; then sudo echo "$pkg|indiepkg" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo -e "\033[0;36m=>\033[0m Package $pkg not found"; fi; else echo -e "\033[0;36m=> \033[0mPackage manager $manager is not installed" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
-                port)       if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo port install $pkg > /dev/null 2>&1; then sudo echo "$pkg|port" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo -e "\033[0;36m=>\033[0m Package $pkg not found"; fi; else echo -e "\033[0;36m=> \033[0mPackage manager $manager is not installed" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
-                cargo)      if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user cargo install $pkg > /dev/null 2>&1; then sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo -e "\033[0;36m=>\033[0m Package $pkg not found"; fi; else echo -e "\033[0;36m=> \033[0mPackage manager $manager is not installed" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
-                npm)        if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user npm install -g $pkg > /dev/null 2>&1; then sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo -e "\033[0;36m=>\033[0m Package $pkg not found"; fi; else echo -e "\033[0;36m=> \033[0mPackage manager $manager is not installed" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
-                pip)        if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user pip3 install "$pkg" > /dev/null 2>&1; then sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo -e "\033[0;36m=>\033[0m Package $pkg not found"; fi; else echo -e "\033[0;36m=> \033[0mPackage manager $manager is not installed" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
-                yay)        if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if yes | sudo yay -S $pkg > /dev/null 2>&1; then sudo echo "$pkg|yay" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo -e "\033[0;36m=>\033[0m Package $pkg not found"; fi; else echo -e "\033[0;36m=> \033[0mPackage manager $manager is not installed" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
-                pacman)     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if yes | sudo pacman -S $pkg > /dev/null 2>&1; then sudo echo "$pkg|pacman" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo -e "\033[0;36m=>\033[0m Package $pkg not found"; fi; else echo -e "\033[0;36m=> \033[0mPackage manager $manager is not installed" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
-                apt)        if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo apt purge > /dev/null 2>&1; then sudo echo "$pkg|apt" >> $HOME/.ndos/shin/packages.txt && echo -e "\033[0;32m=>\033[0m Installed $pkg"; else echo -e "\033[0;36m=>\033[0m Package $pkg not found"; fi; else echo -e "\033[0;36m=> \033[0mPackage manager $manager is not installed" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
-                *)          echo -e "\033[0;36m=> \033[0mPackage manager $manager not found" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers" ;;
+                brew)       if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user brew install $pkg > /dev/null 2>&1; then sudo echo "$pkg|brew" >> $HOME/.ndos/shin/packages.txt && echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e"" ; else echo -en "\r\033[0;31m=>\033[0m Package $pkg not found      " && echo -e"" ; fi; else echo -en "\r\033[0;31m=> \033[0mPackage manager $manager is not installed      " && echo -e"" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
+                indiepkg)   if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user indiepkg install -y $pkg > /dev/null 2>&1; then sudo echo "$pkg|indiepkg" >> $HOME/.ndos/shin/packages.txt && echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e"" ; else echo -en "\r\033[0;36m=>\033[0m Package $pkg not found      " && echo -e"" ; fi; else echo -en "\r\033[0;31m=> \033[0mPackage manager $manager is not installed      " && echo -e"" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
+                port)       if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo port install $pkg > /dev/null 2>&1; then sudo echo "$pkg|port" >> $HOME/.ndos/shin/packages.txt && echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e"" ; else echo -e "\r\033[0;31m=>\033[0m Package $pkg not found      " && echo -e"" ; fi; else echo -en "\r\033[0;31m=> \033[0mPackage manager $manager is not installed      " && echo -e"" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
+                cargo)      if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user cargo install $pkg > /dev/null 2>&1; then sudo echo "$pkg|cargo" >> $HOME/.ndos/shin/packages.txt && echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e"" ; else echo -en "\r\033[0;31m=>\033[0m Package $pkg not found      " && echo -e"" ; fi; else echo -en "\r\r\033[0;31m=> \033[0mPackage manager $manager is not installed      " && echo -e"" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
+                npm)        if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user npm install -g $pkg > /dev/null 2>&1; then sudo echo "$pkg|npm" >> $HOME/.ndos/shin/packages.txt && echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e"" ; else echo -en "\r\033[0;31m=>\033[0m Package $pkg not found      " && echo -e"" ; fi; else echo -en "\r\033[0;31m=> \033[0mPackage manager $manager is not installed      " && echo -e"" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
+                pip)        if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo -u $user pip3 install "$pkg" > /dev/null 2>&1; then sudo echo "$pkg|pip" >> $HOME/.ndos/shin/packages.txt && echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e"" ; else echo -en "\r\033[0;31m=>\033[0m Package $pkg not found      " && echo -e"" ; fi; else echo -en "\r\033[0;31m=> \033[0mPackage manager $manager is not installed      " && echo -e"" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
+                yay)        if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if yes | sudo yay -S $pkg > /dev/null 2>&1; then sudo echo "$pkg|yay" >> $HOME/.ndos/shin/packages.txt && echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e"" ; else echo -en "\r\033[0;31m=>\033[0m Package $pkg not found      " && echo -e"" ; fi; else echo -en "\r\033[0;31m=> \033[0mPackage manager $manager is not installed      " && echo -e"" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
+                pacman)     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if yes | sudo pacman -S $pkg > /dev/null 2>&1; then sudo echo "$pkg|pacman" >> $HOME/.ndos/shin/packages.txt && echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e"" ; else echo -en "\r\033[0;31m=>\033[0m Package $pkg not found      " && echo -e"" ; fi; else echo -en "\r\033[0;31m=> \033[0mPackage manager $manager is not installed      " && echo -e"" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
+                apt)        if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep $manager > /dev/null 2>&1; then if sudo apt purge > /dev/null 2>&1; then sudo echo "$pkg|apt" >> $HOME/.ndos/shin/packages.txt && echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e"" ; else echo -en "\r\033[0;31m=>\033[0m Package $pkg not found      " && echo -e"" ; fi; else echo -en "\r\033[0;31m=> \033[0mPackage manager $manager is not installed      " && echo -e"" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers"; fi ;;
+                *)          echo -en "\r\033[0;36m=> \033[0mPackage manager $manager not found      " && echo -e "" && echo -e "\033[0;36m=> \033[0mRun 'sudo shin -lpm' to view all installed package managers" ;;
             esac
         fi
     done
 }
+
 ##### List #####
 # list installed packages
 listInsalled () {
-    cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}'
+    Packages=($(cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}'));
+    for i in "${!Packages[@]}"; do
+        echo -e "\033[0;31m${Packages[$i]}\033[0m"
+    done
 }
 listManagers () {
-    cat  $HOME/.ndos/shin/managers.txt
+    Managers=($(cat $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $2}'));
+    for i in "${!Managers[@]}"; do
+        echo -e "\033[0;35m${Managers[$i]}\033[0m"
+    done
 }
 listPackageWithManagers () {
     Packages=($(cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}'));
     Managers=($(cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $2}'));
     for i in "${!Packages[@]}"; do
-        echo -e "${Managers[$i]}     \t -->\t      ${Packages[$i]}"
+        echo -e "\033[0;35m${Managers[$i]}\033[0m     \t -->\t      \033[0;31m${Packages[$i]}\033[0m"
     done
 }
 
@@ -236,19 +245,20 @@ remove () {
         pkg=$1
         manager=$(cat  $HOME/.ndos/shin/packages.txt | grep $pkg | awk -F "|" '{print $2}')
         case $manager in
-            brew)       sudo -u $user brew uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
-            indiepkg)   sudo -u $user indiepkg uninstall -y $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
-            port)       sudo port uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
-            cargo)      sudo -u $user cargo uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
-            npm)        sudo -u $user npm uninstall -g $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
-            pip)        yes | sudo -u $user python -m pip uninstall $pkg > /dev/null 2>&1 && yes | sudo -u $user pip3 uninstall $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
-            yay)        yes | sudo yay -Rns $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
-            pacman)     yes | sudo pacman -Rns $pkg > /dev/null 2>&1 && echo -e "\033[0;32m=>\033[0m Uninstalled $pkg" ;;
-            *)          echo -e "\033[0;36m=>\033[0m No package named $pkg is installed" ;;
+            brew)       sudo -u $user brew uninstall $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
+            indiepkg)   sudo -u $user indiepkg uninstall -y $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
+            port)       sudo port uninstall $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
+            cargo)      sudo -u $user cargo uninstall $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
+            npm)        sudo -u $user npm uninstall -g $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
+            pip)        yes | sudo -u $user python -m pip uninstall $pkg > /dev/null 2>&1 && yes | sudo -u $user pip3 uninstall $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
+            yay)        yes | sudo yay -Rns $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
+            pacman)     yes | sudo pacman -Rns $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
+            *)          echo -en "\r\033[0;36m=>\033[0m No package named $pkg is installed" ;;
         esac
     }
     # loop through packages
     for pkg in $@; do
+        echo -en "\r\033[0;33m=> \033[0mUninstalling $pkg"
         uninstallPackage $pkg
         uninstallFromlist $pkg
     done
@@ -271,10 +281,23 @@ query () {
 helpTxt () {
 cat <<EOF
 Shin Usage:
-sudo shin
-        -h
-        help
+shin
+    -h
+    help
 
+    -l
+    list
+    list-packages
+
+    -lm
+    -lpm
+    list-managers
+    list-package-managers
+
+    -la
+    list-all
+
+sudo shin
         -q <package>
         query <package>
 
@@ -285,17 +308,6 @@ sudo shin
         -us
         shin-update
 
-        -l
-        list
-        list-packages
-
-        -lm
-        -lpm
-        list-managers
-        list-package-managers
-
-        -la
-        list-all
 
         -i <packages>
         install <packages>
@@ -308,8 +320,8 @@ sudo shin
         -ip <packages>
         pkgman-install <packages>
 
-    For more info visit the wiki:
-    https://github.com/NewDawn0/shin-package-manager/wiki
+For more info visit the wiki:
+https://github.com/NewDawn0/shin-package-manager/wiki
 EOF
 }
 ##### main #####
