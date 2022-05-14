@@ -253,7 +253,7 @@ remove () {
             pip)        yes | sudo -u $user python -m pip uninstall $pkg > /dev/null 2>&1 && yes | sudo -u $user pip3 uninstall $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
             yay)        yes | sudo yay -Rns $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
             pacman)     yes | sudo pacman -Rns $pkg > /dev/null 2>&1 && echo -en "\r\033[0;32m=>\033[0m Uninstalled $pkg      " && echo -e "" ;;
-            *)          echo -en "\r\033[0;36m=>\033[0m No package named $pkg is installed" ;;
+            *)          echo -en "\r\033[0;36m=>\033[0m No package named $pkg is installed      " && echo -e "";;
         esac
     }
     # loop through packages
