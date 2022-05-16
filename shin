@@ -282,11 +282,31 @@ remove () {
         esac
     }
     # loop through packages
-    for pkg in $@; do
-        echo -en "\r\033[0;33m=> \033[0mUninstalling $pkg"
-        uninstallPackage $pkg
-        uninstallFromlist $pkg
+    for pkg in "$@"; do
+        # check if the package is already installed
+        if cat $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}' | grep $pkg > /dev/null 2>&1; then
+            # check if threading is enabled
+            if [[ $mode == "threaded" ]]; then
+                echo $pkg >> $HOME/.ndos/shin/uninstall.txt
+            else
+                echo -en "\r\033[0;33m=> \033[0mUninstalling $pkg"
+                uninstallPackage $pkg
+                uninstallFromlist $pkg
+            fi
+        else
+            echo -e "\033[0;36m=>\033[0m $pkg is not installed"
+        fi
     done
+    if [[ $mode == "threaded" ]]; then
+        echo -e "\033[0;33m=> \033[0mUninstalling packages"
+        while IFS= read -r package; do
+            uninstallPackage $package && uninstallFromlist $package &
+        done < $HOME/.ndos/shin/uninstall.txt
+        wait
+        echo -e "\033[0;32m=> \033[0mDone"
+        cat $HOME/.ndos/shin/uninstall.txt
+        cat /dev/null > $HOME/.ndos/shin/uninstall.txt
+    fi
 }
 ##### query #####
 query () {
