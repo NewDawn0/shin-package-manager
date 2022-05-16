@@ -6,30 +6,27 @@ source $HOME/.ndos/shin/shinVersion.config
 ##### updater #####
 # updates all packages
 update () {
-    echo -ne "\033[0;33m=> \033[0mUpadting 0/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 0/10\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep brew > /dev/null 2>&1; then sudo -u $user brew update > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=> \033[0mUpadting 1/12\033[0m\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 1/10\033[0m\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep brew > /dev/null 2>&1; then sudo -u $user brew upgrade > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=> \033[0mUpadting 2/12\033[0m\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 2/10\033[0m\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep indiepkg > /dev/null 2>&1; then sudo -u $user indiepkg update > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=>\033[0m Upadting 3/12\033[0m\r"
+    echo -ne "\033[0;33m=>\033[0m Upadting 3/10\033[0m\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep npm > /dev/null 2>&1; then sudo -u $user npm install -g npm > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=> \033[0mUpadting 4/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 4/10\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep npm > /dev/null 2>&1; then sudo -u $user npm update -g > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=>\033[0m Upadting 5/12\r"
+    echo -ne "\033[0;33m=>\033[0m Upadting 5/10\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep port > /dev/null 2>&1; then sudo port selfupdate > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=> \033[0mUpadting 6/12\r"
-    #if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pip > /dev/null 2>&1; then sudo -u $user pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=> \033[0mUpadting 7/12\r"
-    echo -ne "\033[0;33m=> \033[0mUpadting 8/12\r"
-    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep apt > /dev/null 2>&1; then sudo apt update && sudo apt upgrade -y > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=> \033[0mUpadting 9/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 6/10\r"
+    if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep apt > /dev/null 2>&1; then yes | sudo apt update && yes | sudo apt upgrade > /dev/null 2>&1; fi
+    echo -ne "\033[0;33m=> \033[0mUpadting 7/10\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep pacman > /dev/null 2>&1; then sudo pacman -Syu > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=> \033[0mUpadting 10/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 8/10\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep yay > /dev/null 2>&1; then sudo yay -Syu > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=> \033[0mUpadting 11/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 9/10\r"
     if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep brew > /dev/null 2>&1; then sudo -u $user brew cleanup > /dev/null 2>&1; fi
-    echo -ne "\033[0;33m=> \033[0mUpadting 12/12\r"
+    echo -ne "\033[0;33m=> \033[0mUpadting 10/10\r"
     echo -e "\033[0;32m=> \033[0mUpdated all packages\r"
     echo ""
 }
@@ -51,6 +48,19 @@ shin-update () {
 ##### install #####
 # install all packages
 install () {
+    indiepkg-threaded () {
+        pkg=$1
+        if cat $HOME/.ndos/shin/managers.txt | awk -F "|" '{print $1}' | grep indiepkg > /dev/null 2>&1; then
+            if sudo -u $user indiepkg install -y $pkg > /dev/null 2>&1; then
+                echo -en "\r\033[0;32m=>\033[0m Installed $pkg      " && echo -e ""
+                sudo echo "$pkg|indiepkg" >> $HOME/.ndos/shin/packages.txt
+            else
+                pacman $pkg
+            fi
+        else
+            pacman $pkg
+        fi
+    }
     indiepkg () {
         pkg=$1
         echo -en "\r\033[0;33m=> \033[0mInstalling $pkg"
@@ -170,12 +180,28 @@ install () {
         fi
     }
     for pkg in "$@"; do
+        # check if the package is already installed
         if cat  $HOME/.ndos/shin/packages.txt | awk -F "|" '{print $1}' | grep $pkg > /dev/null 2>&1; then
             echo -e "\r\033[0;36m=>\033[0m $pkg is already installed      " && echo -e ""
         else
-            indiepkg $pkg
+            # check if threading is enabled
+            if [[ $mode == "threaded" ]]; then
+                echo $pkg >> $HOME/.ndos/shin/install.txt
+            else
+                indiepkg $pkg
+                echo "linear"
+            fi
         fi
     done
+    if [[ $mode == "threaded" ]]; then
+        echo -en "\r\033[0;33m=> \033[0mInstalling packages"
+        while IFS= read -r package; do
+            indiepkg-threaded $package &
+        done < $HOME/.ndos/shin/install.txt
+        wait
+        echo -e "\033[0;32m=> \033[0mDone"
+        cat /dev/null > $HOME/.ndos/shin/install.txt
+    fi
 }
 # install packages with specified package manager
 packagemanager-install () {
@@ -325,12 +351,19 @@ For more info visit the wiki:
 https://github.com/NewDawn0/shin-package-manager/wiki
 EOF
 }
+
+debug () {
+    echo -en "\r\033[0;33m=> \033[0mInstalling 1\n\033[0;33m=> \033[0mInstalling 3\n\033[0;33m=> \033[0mInstalling 2\n"
+    sleep 15
+    echo -en "\r\033[0;36m=> \033[Installed 1\n\033[0;36m=> \033[Installed 3\n\033[0;36m=> \033[Installed 2\n      " && echo -e ""
+}
 ##### main #####
 # check for root privileges
 id=$(id -u)
 if [ $id -eq 0 ]; then
     # check flags
     case $1 in
+        debug)                  debug "${@:2}" ;;
         -h)                     helpTxt ;;
         help)                   helpTxt ;;
         list-all)               listPackageWithManagers ;;
